@@ -1,4 +1,4 @@
-package data.models
+package com.example.notetaker.data.models
 
 import androidx.compose.ui.graphics.Color
 import com.example.notetaker.ui.theme.*

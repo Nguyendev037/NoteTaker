@@ -33,16 +33,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
-        text = "Hello $name!",
-        modifier = modifier
+        text = "Nguyen Dep Trai",
+
     )
 
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    NoteTakerTheme {
-        Greeting("Android")
-    }
-}
