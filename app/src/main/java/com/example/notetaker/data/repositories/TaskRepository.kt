@@ -2,11 +2,15 @@ package com.example.notetaker.data.repositories
 
 import com.example.notetaker.data.TaskDao
 import com.example.notetaker.data.models.Tasks
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 //Hilt Library is using that return type to decide which one of those provide function
+//ViewModelScoped annotation will tell the Dagger to ensure the TaskRepository is alive
+// as long as the sharedView model alive
 
+@ViewModelScoped
 class TaskRepository @Inject constructor(private val taskDao: TaskDao) {
 
     val getAllTasks: Flow<List<Tasks>> = taskDao.getAllTasks()
@@ -36,6 +40,5 @@ class TaskRepository @Inject constructor(private val taskDao: TaskDao) {
     fun searchDatabase(searchQuery:String) : Flow<List<Tasks>>{
         return taskDao.searchDatabase(searchQuery = searchQuery)
     }
-
 
 }
