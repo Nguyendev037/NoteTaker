@@ -2,6 +2,7 @@ package com.example.notetaker.Frontend.ui.screens.list
 
 import androidx.compose.foundation.background
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DropdownMenu
@@ -26,18 +27,23 @@ import androidx.compose.ui.Modifier
 import com.example.notetaker.components.PriorityComponent
 
 import com.example.notetaker.ui.theme.*
+
 // Main AppBar
 // One Action will be passed from parent to child into 4 times. with the {Name}action composable is
 // the smallest and ListAppBar is the largest
 @Composable
 fun ListAppBar() {
-    DefaultListAppBar(onSearchClicked = {}, onSortClicked = {})
+    DefaultListAppBar(onSearchClicked = {}, onSortClicked = {}, onDeleteClicked = {})
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DefaultListAppBar(onSearchClicked: () -> Unit, onSortClicked: (Priority) -> Unit) {
+fun DefaultListAppBar(
+    onSearchClicked: () -> Unit,
+    onSortClicked: (Priority) -> Unit,
+    onDeleteClicked: () -> Unit
+) {
     TopAppBar(
         title = {
             Text(text = "Tasks")
@@ -47,16 +53,25 @@ fun DefaultListAppBar(onSearchClicked: () -> Unit, onSortClicked: (Priority) -> 
             titleContentColor = MaterialTheme.colorScheme.surface, // Text color
         ),
         actions = {
-            ListAppBarActions(onSearchClicked = onSearchClicked, onSortClicked = onSortClicked)
+            ListAppBarActions(
+                onSearchClicked = onSearchClicked,
+                onSortClicked = onSortClicked,
+                onDeleteClicked = onDeleteClicked
+            )
         }
     )
 }
 
 //This contains all the Action of AppBar
 @Composable
-fun ListAppBarActions(onSearchClicked: () -> Unit, onSortClicked: (Priority) -> Unit) {
+fun ListAppBarActions(
+    onSearchClicked: () -> Unit,
+    onSortClicked: (Priority) -> Unit,
+    onDeleteClicked: () -> Unit
+) {
     SearchAction(onSearchClicked = onSearchClicked)
     SortAction(onSortClicked = onSortClicked)
+    DeleteAction(onDeleteClicked = onDeleteClicked)
 }
 
 //Declare the Search Button with the action search
@@ -88,7 +103,11 @@ fun SortAction(
             tint = MaterialTheme.colorScheme.surface
         )
 
-        DropdownMenu(expanded = expanded, onDismissRequest = { "/Todo" }, modifier = Modifier.background(DropdownBackColor2)) {
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { "/Todo" },
+            modifier = Modifier.background(DropdownBackColor2)
+        ) {
 
             DropdownMenuItem(onClick = {
                 expanded = false
@@ -108,13 +127,24 @@ fun SortAction(
     }
 }
 
+@Composable
+fun DeleteAction(onDeleteClicked: () -> Unit) {
+    IconButton(onClick = {onDeleteClicked}) {
+        Icon(
+            imageVector = Icons.Filled.Delete,
+            contentDescription = "Delete action",
+            tint = MaterialTheme.colorScheme.surface
+        )
+    }
+}
 
 @Composable
 @Preview
 private fun DefaultListAppBarPreview() {
     DefaultListAppBar(
         onSearchClicked = {},
-        onSortClicked = {}
+        onSortClicked = {},
+        onDeleteClicked = {}
     )
 
 }
