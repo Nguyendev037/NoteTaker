@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-
+import com.example.notetaker.ui.theme.*
 import com.example.notetaker.data.models.Priority
 
 
@@ -27,7 +27,7 @@ fun PriorityComponent (priority: Priority) {
            modifier = Modifier.padding(start = 12.dp),
            text = priority.name,
            style = MaterialTheme.typography.titleMedium,
-           color = MaterialTheme.colorScheme.surface
+           color = DropdownText
        )
    }
 }

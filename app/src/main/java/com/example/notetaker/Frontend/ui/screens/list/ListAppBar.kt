@@ -1,5 +1,6 @@
 package com.example.notetaker.Frontend.ui.screens.list
 
+import androidx.compose.foundation.background
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
@@ -21,8 +22,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.notetaker.data.models.Priority
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import com.example.notetaker.components.PriorityComponent
 
+import com.example.notetaker.ui.theme.*
 // Main AppBar
 // One Action will be passed from parent to child into 4 times. with the {Name}action composable is
 // the smallest and ListAppBar is the largest
@@ -85,7 +88,7 @@ fun SortAction(
             tint = MaterialTheme.colorScheme.surface
         )
 
-        DropdownMenu(expanded = expanded, onDismissRequest = { "/Todo" }) {
+        DropdownMenu(expanded = expanded, onDismissRequest = { "/Todo" }, modifier = Modifier.background(DropdownBackColor2)) {
 
             DropdownMenuItem(onClick = {
                 expanded = false

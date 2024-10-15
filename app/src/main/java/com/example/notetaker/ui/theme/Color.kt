@@ -18,3 +18,10 @@ val MediumPriorityColor = Color(0xFFEEEE00)
 val HighPriorityColor = Color(0xFFEE2C2C)
 val NonePriorityColor = Color(0xFFFFFFE0)
 
+// Color for Background Dropdown
+
+val DropdownBackColor1 = Color(0xFFFAFAFA)
+val DropdownBackColor2 = Color(0xFFE3F2FD)
+
+val DropdownText = Color(0xFF0D47A1)
+
