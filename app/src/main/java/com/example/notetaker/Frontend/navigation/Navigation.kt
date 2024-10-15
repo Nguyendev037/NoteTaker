@@ -14,12 +14,15 @@ fun SetUpNavigation (navController: NavHostController){
         Screens(navController = navController)
     }
 
+    // NavHost is the main Navigation to controller all the Navigation
+    // In here we defined all the composabl screen, with two parameter props are
+    // navController and startDestination
     NavHost(
         navController = navController,
         startDestination = "list/NO_ACTION"
     ) {
         listComposable(
-            navigateToTaskScreen = screen.task,
+            navigateToTaskScreen = screen.task
         )
         taskComposable(
             navigateToListScreen = screen.list

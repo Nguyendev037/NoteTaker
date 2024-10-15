@@ -27,6 +27,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NoteTakerTheme {
+                // NavHostController is created once and passed down to child composables
                navController = rememberNavController()
                 SetUpNavigation(navController = navController)
             }
