@@ -19,7 +19,7 @@ import javax.inject.Inject
 class SharedViewModel @Inject constructor(private val repository: TaskRepository): ViewModel() {
 
 
-    //MutableFlow is a special Flow not only for handle async but also can be change the
+    // MutableFlow is a special Flow not only for handle async but also can be change the
     // state data over time and can be observed
     private val _allTasks = MutableStateFlow<List<Tasks>>(emptyList())
     // StateFlow is for "read-only" state data, it's only change based on the function
