@@ -51,9 +51,11 @@ import java.security.Key
 @Composable
 fun ListAppBar() {
 //    DefaultListAppBar(onSearchClicked = {}, onSortClicked = {}, onDeleteClicked = {})
+
+    var searchText by remember { mutableStateOf("") }
     SearchAppBar(
-        text = "Search",
-        onTextChange = {},
+        text = searchText,
+        onTextChange = {searchText = it},
         onClosedClicked = {},
         onSearchClicked = {},
     )
@@ -170,7 +172,7 @@ fun SearchAppBar(
     onClosedClicked: () -> Unit,
     onSearchClicked: (String) -> Unit
 ) {
-    //
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -191,6 +193,7 @@ fun SearchAppBar(
             onValueChange = { onTextChange(it) },
             placeholder = {
                 Text(
+                    modifier = Modifier.alpha(0.5f),
                     text = "Search",
                     color = Color.White,
                 )
@@ -253,9 +256,12 @@ private fun DefaultListAppBarPreview() {
 @Composable
 @Preview
 private fun SearchAppBarPreview() {
+
+    var searchText by remember {mutableStateOf("")}
+
     SearchAppBar(
         text = "Search",
-        onTextChange = {},
+        onTextChange = {searchText = it},
         onClosedClicked = {},
         onSearchClicked = {},
     )
