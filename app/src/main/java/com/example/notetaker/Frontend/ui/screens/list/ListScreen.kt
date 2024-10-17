@@ -1,5 +1,6 @@
 package com.example.notetaker.Frontend.ui.screens.list
 
+import android.annotation.SuppressLint
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
@@ -9,8 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.notetaker.viewmodels.SharedViewModel
+import com.example.notetaker.Frontend.ui.screens.list.ListContent
 
-
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ListScreen (
     navigateToTaskScreen: (taskId: Int) -> Unit,
@@ -23,7 +25,8 @@ fun ListScreen (
         topBar = {
             ListAppBar(sharedViewModel = sharedViewModel, searchAppBarState = searchAppBarState, searchTextState = searchTextState)
         },
-        content = {},
+        content = {padding ->
+            ListContent()},
         floatingActionButton = {
             ListFAB(onFabClicked = navigateToTaskScreen)
         },

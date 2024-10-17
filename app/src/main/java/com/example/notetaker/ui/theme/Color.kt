@@ -29,5 +29,8 @@ val DropdownBackColor2 = Color(0xFFE3F2FD)
 
 val DropdownText = Color(0xFF0D47A1)
 
-// SearchAppBar
+// Text item
+val textColorNormal = Color.White
+val textColor1 = Color(0xFF696969)
+val textColor2 = Color(0xFFC4C4C4)
 
