@@ -11,7 +11,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 // this class is Viewmodel for the MVVM architecture pattern
 // Viewmodel takes responsibility for control the user interaction and backend site

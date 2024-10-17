@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -26,23 +28,40 @@ import com.example.notetaker.data.models.Priority
 import com.example.notetaker.data.models.Tasks
 import com.example.notetaker.ui.theme.*
 
+
 @Composable
-fun ListContent() {
+fun ListContent(
+    tasks: List<Tasks>,
+    navigateToTaskScreen: (Int) -> Unit
+) {
+    // Update version of Column, it's useful with large size component
+    // Due to it's lazy mechanism
+    LazyColumn () {
+        items(
+            items = tasks,
+            key  = {task -> task.id},
+        ) {
+            task ->
+            TaskItem(task = task, navigateToTaskScreen = navigateToTaskScreen)
+        }
+    }
+
+
 }
 
 
 @Composable
 fun TaskItem(
     task: Tasks,
-    navigateToTaskScreens: (taskId: Int) -> Unit
+    navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
     Surface(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
         color = MaterialTheme.colorScheme.onSecondary,
         shape = RectangleShape,
         shadowElevation = 2.dp,
         onClick = {
-            navigateToTaskScreens(task.id)
+            navigateToTaskScreen(task.id)
         }
     ) {
         Column(
@@ -93,5 +112,5 @@ fun TaskItem(
 @Preview
 fun TaskItemPreview() {
     TaskItem(task = Tasks(0, "Title", "Nguyen Qua Dep Trai", Priority.High),
-        navigateToTaskScreens = {})
+        navigateToTaskScreen = {})
 }

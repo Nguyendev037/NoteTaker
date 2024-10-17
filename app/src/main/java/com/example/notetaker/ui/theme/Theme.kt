@@ -30,7 +30,8 @@ private val LightColorScheme = lightColorScheme(
     onSecondary = Color.White,
     onTertiary = Color.White,
     onBackground = Color(0xFF1C1B1F),
-    onPrimaryContainer = Color(0xFF3949AB)
+    onPrimaryContainer = Color(0xFF3949AB),
+    onSecondaryContainer = Color(0xFF5C6BC0),
 // text component
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
