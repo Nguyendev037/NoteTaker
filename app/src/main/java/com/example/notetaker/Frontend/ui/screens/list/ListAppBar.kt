@@ -3,6 +3,9 @@ package com.example.notetaker.Frontend.ui.screens.list
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -34,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.notetaker.data.models.Priority
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.input.ImeAction
@@ -43,22 +47,38 @@ import androidx.compose.ui.unit.sp
 import com.example.notetaker.components.PriorityComponent
 
 import com.example.notetaker.ui.theme.*
+import com.example.notetaker.viewmodels.SharedViewModel
 import java.security.Key
 
 // Main AppBar
 // One Action will be passed from parent to child into 4 times. with the {Name}action composable is
 // the smallest and ListAppBar is the largest
 @Composable
-fun ListAppBar() {
-//    DefaultListAppBar(onSearchClicked = {}, onSortClicked = {}, onDeleteClicked = {})
+fun ListAppBar(
+    sharedViewModel: SharedViewModel,
+    searchAppBarState: String,
+    searchTextState: String
+) {
 
-    var searchText by remember { mutableStateOf("") }
-    SearchAppBar(
-        text = searchText,
-        onTextChange = {searchText = it},
-        onClosedClicked = {},
-        onSearchClicked = {},
-    )
+    when (searchAppBarState) {
+        "CLOSE" -> {
+            DefaultListAppBar(onSearchClicked = {
+                sharedViewModel.searchAppBarState.value = "OPEN"
+            }, onSortClicked = {}, onDeleteClicked = {})
+        }
+
+        else -> {
+            SearchAppBar(
+                text = searchTextState,
+                onTextChange = { newText -> sharedViewModel.searchTextState.value = newText },
+                onClosedClicked = {
+                    sharedViewModel.searchAppBarState.value = "CLOSE"
+                    sharedViewModel.searchTextState.value = ""
+                },
+                onSearchClicked = {},
+            )
+        }
+    }
 }
 
 
@@ -102,7 +122,7 @@ fun ListAppBarActions(
 //Declare the Search Button with the action search
 @Composable
 fun SearchAction(onSearchClicked: () -> Unit) {
-    IconButton(onClick = { onSearchClicked }) {
+    IconButton(onClick = { onSearchClicked() }) {
         Icon(
             imageVector = Icons.Filled.Search,
             contentDescription = "Search Tasks",
@@ -155,7 +175,7 @@ fun SortAction(
 // Declare the Delete Button with the Button Action
 @Composable
 fun DeleteAction(onDeleteClicked: () -> Unit) {
-    IconButton(onClick = { onDeleteClicked }) {
+    IconButton(onClick = { onDeleteClicked() }) {
         Icon(
             imageVector = Icons.Filled.Delete,
             contentDescription = "Delete action",
@@ -175,8 +195,9 @@ fun SearchAppBar(
 
     Surface(
         modifier = Modifier
+            .wrapContentHeight(align = Alignment.CenterVertically)
             .fillMaxWidth()
-            .height(56.dp)
+            .height(64.dp)
             .background(Color(0xFF3949AB)),
         shadowElevation = 8.dp,
         color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -205,9 +226,10 @@ fun SearchAppBar(
             // for make the input text in on line
             singleLine = true,
             leadingIcon = {
-                IconButton(modifier = Modifier
-                    .alpha(0.38f),
-                    onClick = {}) {
+                IconButton(
+                    modifier = Modifier.alpha(0.38f),
+                    onClick = {}
+                ) {
                     Icon(
                         imageVector = Icons.Filled.Search,
                         contentDescription = "Seach Button",
@@ -217,11 +239,11 @@ fun SearchAppBar(
             },
             // trailing Icon is the component that appear at the end of line
             trailingIcon = {
-                IconButton(onClick = {onClosedClicked}) {
+                IconButton(onClick = { onClosedClicked() }) {
                     Icon(
                         imageVector = Icons.Filled.Close,
                         contentDescription = "Close Button",
-                        tint = MaterialTheme.colorScheme.onSurface
+                        tint = Color.White
                     )
                 }
             },
@@ -229,11 +251,11 @@ fun SearchAppBar(
                 imeAction = ImeAction.Search
             ),
             keyboardActions = KeyboardActions(
-               onSearch = {
-                   // text in parameter of SearchAppBar is pass to this Function
-                   // The onChange function is value = text
-                   onSearchClicked(text)
-               }
+                onSearch = {
+                    // text in parameter of SearchAppBar is pass to this Function
+                    // The onChange function is value = text
+                    onSearchClicked(text)
+                }
             )
 
 
@@ -257,11 +279,11 @@ private fun DefaultListAppBarPreview() {
 @Preview
 private fun SearchAppBarPreview() {
 
-    var searchText by remember {mutableStateOf("")}
+    var searchText by remember { mutableStateOf("") }
 
     SearchAppBar(
         text = "Search",
-        onTextChange = {searchText = it},
+        onTextChange = { searchText = it },
         onClosedClicked = {},
         onSearchClicked = {},
     )

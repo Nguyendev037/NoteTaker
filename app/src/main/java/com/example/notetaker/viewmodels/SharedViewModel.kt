@@ -1,5 +1,7 @@
 package com.example.notetaker.viewmodels
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.notetaker.data.models.Tasks
@@ -18,6 +20,9 @@ import javax.inject.Inject
 @HiltViewModel
 class SharedViewModel @Inject constructor(private val repository: TaskRepository): ViewModel() {
 
+
+    val searchAppBarState: MutableState<String> = mutableStateOf("CLOSE")
+    val searchTextState : MutableState<String> = mutableStateOf("")
 
     // MutableFlow is a special Flow not only for handle async but also can be change the
     // state data over time and can be observed

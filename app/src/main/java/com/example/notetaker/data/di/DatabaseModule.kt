@@ -12,12 +12,12 @@ import dagger.hilt.components.SingletonComponent
 
 import javax.inject.Singleton
 
-// The main reason we declare DatabaseModule, due to reduce the TaskDataBase to everywhere
+// The main reason we declare DatabaseModule, due to reduce the TaskDataBase declaration to everywhere
 // we tried to used, we just need to inject the DatabaseModule to handle that, this will be easier
 // for expanding project and easier to control the flow logic of project
 
 //Provides Annotation is tried to tell Dagger how to create an Dependency
-// SingletonComponent is for Application level injection
+// SingletonComponent ensures that only one that instance is created and shared across the application.
 
 // Hilt Library is using that return type to decide which one of those provide function
 
@@ -28,7 +28,10 @@ object DatabaseModule {
     @Singleton
     @Provides
     fun provideDatabase(
-        @ApplicationContext context: Context
+        //@ApplicationContext use for dependencies that need a context tied to
+        // the application's lifecycle.
+        @ApplicationContext
+        context: Context
     ) = Room.databaseBuilder(
         context,
         TaskDatabase::class.java,

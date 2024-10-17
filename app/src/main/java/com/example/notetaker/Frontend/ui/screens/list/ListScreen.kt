@@ -8,16 +8,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.notetaker.viewmodels.SharedViewModel
 
 
 @Composable
 fun ListScreen (
-    navigateToTaskScreen: (taskId: Int) -> Unit
+    navigateToTaskScreen: (taskId: Int) -> Unit,
+    sharedViewModel: SharedViewModel
 ) {
 
+    val searchAppBarState : String = sharedViewModel.searchAppBarState.value
+    val searchTextState : String  = sharedViewModel.searchTextState.value
     Scaffold(
         topBar = {
-            ListAppBar()
+            ListAppBar(sharedViewModel = sharedViewModel, searchAppBarState = searchAppBarState, searchTextState = searchTextState)
         },
         content = {},
         floatingActionButton = {
@@ -40,8 +44,3 @@ fun ListFAB (
     }
 }
 
-@Composable
-@Preview
-private fun ListScreenPreview() {
-    ListScreen(navigateToTaskScreen = {})
-}

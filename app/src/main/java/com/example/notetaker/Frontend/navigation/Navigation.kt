@@ -6,9 +6,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import com.example.notetaker.Frontend.navigation.destination.listComposable
 import com.example.notetaker.Frontend.navigation.destination.taskComposable
+import com.example.notetaker.viewmodels.SharedViewModel
 
 @Composable
-fun SetUpNavigation (navController: NavHostController){
+fun SetUpNavigation (
+    navController: NavHostController,
+    sharedViewModel: SharedViewModel
+){
     // function remember like useEffect in React only re-render when navController change
     val screen = remember(navController){
         Screens(navController = navController)
@@ -22,7 +26,8 @@ fun SetUpNavigation (navController: NavHostController){
         startDestination = "list/NO_ACTION"
     ) {
         listComposable(
-            navigateToTaskScreen = screen.task
+            navigateToTaskScreen = screen.task,
+            sharedViewModel = sharedViewModel
         )
         taskComposable(
             navigateToListScreen = screen.list
