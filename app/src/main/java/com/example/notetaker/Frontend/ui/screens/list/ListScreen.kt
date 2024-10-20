@@ -1,6 +1,7 @@
 package com.example.notetaker.Frontend.ui.screens.list
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
@@ -32,8 +33,11 @@ fun ListScreen(
 
     val allTasks by sharedViewModel.allTasks.collectAsState();
 
+    Log.d("allTasks", allTasks.toString());
+
     val searchAppBarState: String = sharedViewModel.searchAppBarState.value
     val searchTextState: String = sharedViewModel.searchTextState.value
+
     Scaffold(
         topBar = {
             ListAppBar(
@@ -52,6 +56,7 @@ fun ListScreen(
 
 }
 
+//Declare ListFAB composable
 @Composable
 fun ListFAB(
     onFabClicked: (taskId: Int) -> Unit

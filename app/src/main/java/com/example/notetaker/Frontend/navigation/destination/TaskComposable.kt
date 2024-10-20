@@ -1,5 +1,6 @@
 package com.example.notetaker.Frontend.navigation.destination
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -18,7 +19,8 @@ fun NavGraphBuilder.taskComposable (
             type = NavType.IntType
         })
     ) {
-
+        navBackStackEntry ->
+        val taskId = navBackStackEntry.arguments!!.getInt("taskId")
     }
 
 }

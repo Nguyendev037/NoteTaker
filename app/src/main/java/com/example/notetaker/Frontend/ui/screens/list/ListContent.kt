@@ -34,32 +34,50 @@ fun ListContent(
     tasks: List<Tasks>,
     navigateToTaskScreen: (Int) -> Unit
 ) {
-    // Update version of Column, it's useful with large size component
-    // Due to it's lazy mechanism
-    LazyColumn () {
-        items(
-            items = tasks,
-            key  = {task -> task.id},
-        ) {
-            task ->
-            TaskItem(task = task, navigateToTaskScreen = navigateToTaskScreen)
-        }
-    }
 
+    if (tasks.isEmpty()) {
+        ListEmpty();
+    } else {
+        DisplayTasks(
+            tasks = tasks,
+            navigateToTaskScreen = navigateToTaskScreen
+        )
+    }
 
 }
 
 
+@Composable
+fun DisplayTasks(
+    tasks: List<Tasks>,
+    navigateToTaskScreen: (taskId: Int) -> Unit
+) {
+    // Update version of Column, it's useful with large size component
+    // Due to it's lazy mechanism
+    LazyColumn() {
+        items(
+            items = tasks,
+            key = { task -> task.id },
+        ) { task ->
+            TaskItem(task = task, navigateToTaskScreen = navigateToTaskScreen)
+        }
+    }
+}
+
+// Declare Task Item for render the task component in task List
 @Composable
 fun TaskItem(
     task: Tasks,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
     Surface(
-        modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 12.dp),
         color = MaterialTheme.colorScheme.onSecondary,
         shape = RectangleShape,
         shadowElevation = 2.dp,
+        // Navigate function to item page
         onClick = {
             navigateToTaskScreen(task.id)
         }
@@ -71,8 +89,10 @@ fun TaskItem(
         ) {
             //Row layout split the one line screen is 9,
             // Modifier.weight(8f) means, that component width is 8
-            Row (modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically){
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
 
                 Text(
                     modifier = Modifier.weight(1f),
@@ -85,7 +105,12 @@ fun TaskItem(
 
 //                Spacer(modifier = Modifier.weight(1f))
 
-                Box(modifier = Modifier.fillMaxWidth().weight(0.1f), contentAlignment = Alignment.TopEnd) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(0.1f),
+                    contentAlignment = Alignment.TopEnd
+                ) {
                     Canvas(
                         modifier = Modifier
                             .width(24.dp)

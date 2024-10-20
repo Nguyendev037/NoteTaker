@@ -5,6 +5,7 @@ import com.example.notetaker.data.models.Tasks
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import javax.inject.Singleton
 
 //Hilt Library is using that return type to decide which one of those provide function
 //ViewModelScoped annotation will tell the Dagger to ensure the TaskRepository is alive

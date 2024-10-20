@@ -36,13 +36,15 @@ object DatabaseModule {
         context,
         TaskDatabase::class.java,
         "task"
-    ).build()
+    )
+        .fallbackToDestructiveMigration()
+        .build()
 
     // The function provideDatabase has been called when passed "TaskDatabase" parameter
     // When we call this function, this will create TaskDataBase variable and then return
     // The TaskDao function variable which is Dao function for the Task
     @Singleton
     @Provides
-    fun provideDao(database: TaskDatabase) =  database.taskDao()
+    fun provideDao(database: TaskDatabase) = database.taskDao()
 }
 
