@@ -2,6 +2,8 @@ package com.example.notetaker.Frontend.ui.screens.list
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
@@ -16,6 +18,7 @@ import com.example.notetaker.viewmodels.SharedViewModel
 import com.example.notetaker.Frontend.ui.screens.list.ListContent
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -30,7 +33,8 @@ fun ListScreen(
     // LaunchedEffect will auto re-compose when the key change
     LaunchedEffect(key1 = true) { sharedViewModel.getAllTasks() }
 
-
+    // The variable allTasks in sharedViewModel will be pass to allTasks variable in ListScreen,
+    // This variable will passed on the ListContent composable
     val allTasks by sharedViewModel.allTasks.collectAsState();
 
     Log.d("allTasks", allTasks.toString());
@@ -39,6 +43,7 @@ fun ListScreen(
     val searchTextState: String = sharedViewModel.searchTextState.value
 
     Scaffold(
+
         topBar = {
             ListAppBar(
                 sharedViewModel = sharedViewModel,
@@ -46,9 +51,15 @@ fun ListScreen(
                 searchTextState = searchTextState
             )
         },
+
         content = { padding ->
-            ListContent(tasks = allTasks, navigateToTaskScreen = navigateToTaskScreen)
+            Column(
+                modifier = Modifier.padding(top = padding.calculateTopPadding())
+            ) {
+                ListContent(tasks = allTasks, navigateToTaskScreen = navigateToTaskScreen)
+            }
         },
+
         floatingActionButton = {
             ListFAB(onFabClicked = navigateToTaskScreen)
         },

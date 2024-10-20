@@ -19,7 +19,7 @@ fun SetUpNavigation (
     }
 
     // NavHost is the main Navigation to controller all the Navigation
-    // In here we defined all the composabl screen, with two parameter props are
+    // In here we defined all the composable screen, with two parameter props are
     // navController and startDestination
     NavHost(
         navController = navController,
@@ -30,7 +30,8 @@ fun SetUpNavigation (
             sharedViewModel = sharedViewModel
         )
         taskComposable(
-            navigateToListScreen = screen.list
+            navigateToListScreen = screen.list,
+            sharedViewModel = sharedViewModel
         )
     }
 }

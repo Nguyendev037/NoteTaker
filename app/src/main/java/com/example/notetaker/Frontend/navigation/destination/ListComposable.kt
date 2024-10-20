@@ -19,6 +19,8 @@ fun NavGraphBuilder.listComposable (
     composable(
         route = "list/{action}",
         // Defined all the route must has a parameter
+        // the action variable can be anything if it's string
+        // This will lead to list screen composable with whatever action
         arguments = listOf(navArgument("action") {
             type = NavType.StringType
         })

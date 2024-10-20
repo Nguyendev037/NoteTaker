@@ -7,6 +7,8 @@ class Screens(navController: NavHostController) {
 
     // Declare a function for navigation. The syntax for using navigate is navController.navigate("")
     // "Action" is type of variable, here is the Enum Class.
+    // The action helps us to define the action from repository in sharedViewmodel,
+    // easier in controlling the flow of app activities
     val list : (Action) -> Unit = { action ->
         navController.navigate("list/${action.name}") {
             // after the navigation success,
