@@ -30,6 +30,7 @@ fun ListScreen(
     // and auto update when that StateFlow change values
 
     // LaunchedEffect kindly the same as UseEffect to handle async task
+    // It will execute when composition starts
     // LaunchedEffect will auto re-compose when the key change
     LaunchedEffect(key1 = true) { sharedViewModel.getAllTasks() }
 

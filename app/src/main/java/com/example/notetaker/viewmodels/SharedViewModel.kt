@@ -12,7 +12,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
+import com.example.notetaker.data.models.Priority
+import dagger.Provides
 
 // this class is Viewmodel for the MVVM architecture pattern
 // Viewmodel takes responsibility for control the user interaction and backend site
@@ -21,7 +24,7 @@ import androidx.compose.runtime.setValue
 @HiltViewModel
 class SharedViewModel @Inject constructor(private val repository: TaskRepository): ViewModel() {
 
-
+    // Get All Tasks Process
     val searchAppBarState: MutableState<String> = mutableStateOf("CLOSE")
     val searchTextState : MutableState<String> = mutableStateOf("")
 
@@ -42,16 +45,44 @@ class SharedViewModel @Inject constructor(private val repository: TaskRepository
         }
     }
 
-
+    // Get  Selected Task Process
     private val _selectedTask : MutableStateFlow<Tasks?>  = MutableStateFlow(null)
     val selectedTask : StateFlow<Tasks?> = _selectedTask
 
     fun getSelectedTask(taskId : Int) {
         viewModelScope.launch {
             repository.getSelectedTask(taskId = taskId).collect {
-                task -> _selectedTask.value = task
+                    task -> _selectedTask.value = task
             }
         }
     }
+
+    // Handle Edit Tasks Process
+    val id : MutableState<Int> = mutableIntStateOf(0)
+    val title : MutableState<String> = mutableStateOf("")
+    val description : MutableState<String> = mutableStateOf("")
+    val priority : MutableState<Priority> = mutableStateOf(Priority.Low)
+
+    fun updateTaskFields(selectedTask : Tasks?) {
+        if(selectedTask != null) {
+            id.value =  selectedTask.id
+            title.value = selectedTask.title
+            description.value = selectedTask.description
+            priority.value = selectedTask.priority
+        } else {
+            id.value =  0
+            title.value = ""
+            description.value = ""
+            priority.value = Priority.Low
+        }
+    }
+
+    // Expanded update function with check title length
+    fun updateTitle(newTitle : String) {
+        if (newTitle.length  < 20) {
+            title.value = newTitle
+        }
+    }
+
 
 }
