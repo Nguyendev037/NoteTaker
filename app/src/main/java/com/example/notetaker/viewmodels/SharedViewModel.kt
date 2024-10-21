@@ -83,6 +83,10 @@ class SharedViewModel @Inject constructor(private val repository: TaskRepository
             title.value = newTitle
         }
     }
+    // validation function to check empty
+    fun validateField(): Boolean {
+     return (title.value.isNotEmpty() && description.value.isNotEmpty())
+    }
 
 
 }

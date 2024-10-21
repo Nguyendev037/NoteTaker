@@ -58,7 +58,9 @@ fun DisplayTasks(
         items(
             items = tasks,
             key = { task -> task.id },
-        ) { task ->
+        ) {
+            //task fetch from items
+            task ->
             TaskItem(task = task, navigateToTaskScreen = navigateToTaskScreen)
         }
     }
@@ -78,6 +80,7 @@ fun TaskItem(
         shape = RectangleShape,
         shadowElevation = 2.dp,
         // Navigate function to item page
+        // when user click on that surface
         onClick = {
             navigateToTaskScreen(task.id)
         }

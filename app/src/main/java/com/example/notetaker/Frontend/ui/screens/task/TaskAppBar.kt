@@ -64,7 +64,7 @@ fun NewTaskAppBar(
             titleContentColor = textColor2 // Text color
         ),
         actions = {
-            AddActionIcon(onAddClicked = {})
+            AddActionIcon(onAddClicked = navigateToListScreen)
             CloseAction(onClosedClicked = navigateToListScreen)
         }
     )
@@ -137,7 +137,7 @@ fun CloseAction(
     onClosedClicked: (Action) -> Unit
 ) {
     IconButton(onClick = {
-        onClosedClicked(Action.NO_ACTION)
+        onClosedClicked(Action.DELETE)
     }) {
         Icon(
             imageVector = Icons.Filled.Close,
