@@ -20,7 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ListScreen(
     navigateToTaskScreen: (taskId: Int) -> Unit,
@@ -38,10 +37,11 @@ fun ListScreen(
     // This variable will passed on the ListContent composable
     val allTasks by sharedViewModel.allTasks.collectAsState();
 
-    Log.d("allTasks", allTasks.toString());
-
     val searchAppBarState: String = sharedViewModel.searchAppBarState.value
     val searchTextState: String = sharedViewModel.searchTextState.value
+
+    val action by sharedViewModel.action
+    sharedViewModel.handleDatabaseAction(action = action);
 
     Scaffold(
 
