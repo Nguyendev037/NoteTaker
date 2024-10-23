@@ -41,6 +41,9 @@ class SharedViewModel @Inject constructor(private val repository: TaskRepository
     // StateFlow is for "read-only" state data, it's only change based on the function
     val allTasks: StateFlow<List<Tasks>> = _allTasks
 
+
+
+
     fun getAllTasks() {
         // ViewmodelScope is a special Scope for ViewModel class of coroutine
         // This is for perform background tasks asynchronously while keeping
@@ -168,5 +171,29 @@ class SharedViewModel @Inject constructor(private val repository: TaskRepository
         }
     }
 
+    // search process
+
+    private val _searchTasks = MutableStateFlow<List<Tasks>>(emptyList())
+    val searchTasks: StateFlow<List<Tasks>> = _searchTasks
+
+
+
+    fun searchDataBaseQuery(searchQuery : String) {
+        Log.d("search process", "success run")
+        Log.d("seachQuery", searchQuery)
+        viewModelScope.launch {
+            repository.searchDatabase(searchQuery = "%$searchQuery%").collect {
+                _searchTasks.value = it
+            }
+        }
+        this.searchAppBarState.value = "OPEN"
+        Log.d("_searchTask in shareviewModel", _searchTasks.value.toString())
+        Log.d("searchTasks in shareviewModel", searchTasks.value.toString())
+    }
+
+
+    fun resetSearchTasks () {
+        this._searchTasks.value = emptyList()
+    }
 
 }

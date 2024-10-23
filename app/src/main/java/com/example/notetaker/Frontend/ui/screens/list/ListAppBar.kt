@@ -1,5 +1,6 @@
 package com.example.notetaker.Frontend.ui.screens.list
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -74,8 +75,11 @@ fun ListAppBar(
                 onClosedClicked = {
                     sharedViewModel.searchAppBarState.value = "CLOSE"
                     sharedViewModel.searchTextState.value = ""
+                    sharedViewModel.resetSearchTasks()
                 },
-                onSearchClicked = {},
+                onSearchClicked = {
+                    Log.d("Search Query", searchTextState)
+                    sharedViewModel.searchDataBaseQuery(searchQuery = searchTextState)},
             )
         }
     }

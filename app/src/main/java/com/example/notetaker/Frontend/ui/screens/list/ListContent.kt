@@ -1,5 +1,6 @@
 package com.example.notetaker.Frontend.ui.screens.list
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -32,17 +34,23 @@ import com.example.notetaker.ui.theme.*
 @Composable
 fun ListContent(
     tasks: List<Tasks>,
-    navigateToTaskScreen: (Int) -> Unit
+    navigateToTaskScreen: (Int) -> Unit,
+    searchTasks : List<Tasks>,
+    searchAppBarState : String
 ) {
+    if (searchAppBarState == "OPEN"  && searchTasks.isNotEmpty()) {
 
-    if (tasks.isEmpty()) {
-        ListEmpty();
+        Log.d("searchTasks in Con", searchTasks.toString())
+
+        HandleListContent(tasks = searchTasks, navigateToTaskScreen = navigateToTaskScreen )
+        Log.d("search process", "find ok")
+
+
     } else {
-        DisplayTasks(
-            tasks = tasks,
-            navigateToTaskScreen = navigateToTaskScreen
-        )
+        HandleListContent(tasks = tasks, navigateToTaskScreen = navigateToTaskScreen )
+        Log.d("search process", "find failed")
     }
+
 
 }
 
@@ -135,6 +143,23 @@ fun TaskItem(
         }
     }
 }
+
+@Composable
+fun HandleListContent(
+    tasks: List<Tasks>,
+    navigateToTaskScreen: (Int) -> Unit,
+) {
+    if (tasks.isEmpty()) {
+        ListEmpty();
+    } else {
+        DisplayTasks(
+            tasks = tasks,
+            navigateToTaskScreen = navigateToTaskScreen
+        )
+    }
+}
+
+
 
 @Composable
 @Preview

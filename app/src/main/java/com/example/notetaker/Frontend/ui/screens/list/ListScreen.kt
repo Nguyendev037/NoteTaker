@@ -50,6 +50,11 @@ fun ListScreen(
     val action by sharedViewModel.action
     val snackBarHostState = remember { SnackbarHostState() }
 
+
+    val searchTasks by sharedViewModel.searchTasks.collectAsState()
+
+    Log.d("_searchTask in Li", searchTasks.toString())
+
     // any action change the screen will fetch all again
     LaunchedEffect(key1 = action) { sharedViewModel.getAllTasks() }
 
@@ -77,7 +82,7 @@ fun ListScreen(
             Column(
                 modifier = Modifier.padding(top = padding.calculateTopPadding())
             ) {
-                ListContent(tasks = allTasks, navigateToTaskScreen = navigateToTaskScreen)
+                ListContent(tasks = allTasks, navigateToTaskScreen = navigateToTaskScreen, searchAppBarState = searchAppBarState, searchTasks = searchTasks)
             }
         },
 
@@ -117,9 +122,6 @@ fun DisplaySnackBar(
     // if any action change this will call handleDatabase function
     LaunchedEffect(key1 = action) {
         if (action != Action.NO_ACTION) {
-
-            Log.d("action in list screen displaySnackbar", action.toString())
-
             handleDatabaseAction();
             val snackBarHostState = snackBarHostState.showSnackbar(
                 message = "${action.name} : $taskTitle",
