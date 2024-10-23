@@ -33,13 +33,15 @@ fun NavGraphBuilder.listComposable (
         navBackStackEntry ->
         val action  = navBackStackEntry.arguments?.getString("action").toAction();
 
-        Log.d("action", action.toString())
+        Log.d("action in listcomposable", action.toString())
 
-        LaunchedEffect(key1 = action) {
-            // update the action value in shareViewModel
-            // "the action" variable will be auto updated after each navigate function
-            sharedViewModel.action.value = action;
-        }
+        sharedViewModel.action.value = action;
+
+//        LaunchedEffect(key1 = action) {
+//            // update the action value in shareViewModel
+//            // "the action" variable will be auto updated after each navigate function
+//            sharedViewModel.action.value = action;
+//        }
 
         ListScreen (
             navigateToTaskScreen = navigateToTaskScreen,

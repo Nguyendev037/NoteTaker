@@ -1,5 +1,6 @@
 package com.example.notetaker.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -63,7 +64,7 @@ class SharedViewModel @Inject constructor(private val repository: TaskRepository
         }
     }
 
-    // Handle Edit Tasks Process
+    // Handle filled selected Task into Field
     val id: MutableState<Int> = mutableIntStateOf(0)
     val title: MutableState<String> = mutableStateOf("")
     val description: MutableState<String> = mutableStateOf("")
@@ -83,8 +84,8 @@ class SharedViewModel @Inject constructor(private val repository: TaskRepository
         }
     }
 
-    // Expanded update function with check title length
-    fun updateTitle(newTitle: String) {
+    // Expanded update field function with check title length
+    fun updateTitleField(newTitle: String) {
         if (newTitle.length < 20) {
             title.value = newTitle
         }
@@ -100,26 +101,69 @@ class SharedViewModel @Inject constructor(private val repository: TaskRepository
         // The "Dispatcher.IO" optional parameter will help the function run in Operation threads
         // With will be more stable and faster to handle complicate task like access
         // database and handle the asynchronous problem
-        viewModelScope.launch (Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
             val newTask = Tasks(
-                title= title.value,
+                title = title.value,
                 description = description.value,
-                priority= priority.value,
+                priority = priority.value,
             )
             repository.addTask(newTask = newTask)
         }
     }
+
+    // Handle Update Function
+    private fun updateTask() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val task = Tasks(
+                id = id.value,
+                title = title.value,
+                description = description.value,
+                priority = priority.value,
+            )
+            repository.updateTask(task = task)
+        }
+    }
+
+    // Handle Delete Function
+    private fun deleteTask() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val taskId = id.value
+            repository.deleteTask(taskId = taskId)
+        }
+    }
+
+    fun changeAction(action: Action) {
+        this.action.value = action
+    }
+
     // This control all the function which access to the database
-     fun handleDatabaseAction(action: Action) {
-        when (action) {
-            Action.ADD -> {
-                addTask()
-            }
-            Action.UPDATE -> {
+    fun handleDatabaseAction(action: Action) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (action) {
+                Action.ADD -> {
+                    addTask()
+//                    changeAction()
+                }
 
-            }
-            else -> {
+                Action.UPDATE -> {
+                    updateTask()
+//                    changeAction()
+                }
 
+                Action.DELETE -> {
+                    deleteTask()
+//                    changeAction(Action.DELETE)
+                }
+
+                Action.UNDO -> {
+                    addTask()
+                    Log.d("action undo is running", "is running")
+//                    changeAction(Action.UNDO)
+                }
+
+                else -> {
+
+                }
             }
         }
     }

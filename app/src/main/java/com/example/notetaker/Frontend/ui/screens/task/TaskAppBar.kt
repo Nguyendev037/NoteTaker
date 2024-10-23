@@ -57,7 +57,7 @@ fun NewTaskAppBar(
             BackActionIcon(onBackClicked = navigateToListScreen)
         },
         title = {
-            Text(text =  "Add Task")
+            Text(text = "Add Task")
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.onPrimaryContainer, // Background color
@@ -137,7 +137,7 @@ fun CloseAction(
     onClosedClicked: (Action) -> Unit
 ) {
     IconButton(onClick = {
-        onClosedClicked(Action.DELETE)
+        onClosedClicked(Action.NO_ACTION)
     }) {
         Icon(
             imageVector = Icons.Filled.Close,
