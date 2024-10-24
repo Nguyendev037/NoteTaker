@@ -26,7 +26,7 @@ class TaskRepository @Inject constructor(private val taskDao: TaskDao) {
         return taskDao.addTask(task = newTask)
     }
 
-    suspend fun updateTask (task : Tasks) {
+    suspend fun updateTask(task: Tasks) {
         taskDao.updateTask(task = task)
     }
 
@@ -34,12 +34,12 @@ class TaskRepository @Inject constructor(private val taskDao: TaskDao) {
         taskDao.deleteTask(taskId = taskId)
     }
 
-suspend fun deleteAllTask() {
-    taskDao.deleteAllTasks()
-}
+    suspend fun deleteAllTask() {
+        taskDao.deleteAllTasks()
+    }
 
-fun searchDatabase(searchQuery:String) : Flow<List<Tasks>>{
-    return taskDao.searchDatabase(searchQuery = searchQuery)
-}
+    fun searchDatabase(searchQuery: String): Flow<List<Tasks>> {
+        return taskDao.searchDatabase(searchQuery = searchQuery)
+    }
 
 }

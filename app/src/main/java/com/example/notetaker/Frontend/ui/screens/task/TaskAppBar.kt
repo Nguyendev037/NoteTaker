@@ -20,6 +20,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.modifier.modifierLocalOf
 import androidx.compose.ui.text.style.TextOverflow
@@ -29,18 +31,22 @@ import com.example.notetaker.data.models.Priority
 import com.example.notetaker.data.models.Tasks
 import com.example.notetaker.ui.theme.*
 import com.example.notetaker.util.Action
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import com.example.notetaker.components.DisplayAlert
 
 @Composable
 fun TaskAppBar(
-    selectedTask :Tasks?,
+    selectedTask: Tasks?,
     navigateToListScreen: (Action) -> Unit
 ) {
-    if(selectedTask == null) {
+    if (selectedTask == null) {
         NewTaskAppBar(navigateToListScreen = navigateToListScreen)
     } else {
         ExistingTaskAppBar(
             selectedTask = selectedTask,
-            navigateToListScreen = navigateToListScreen)
+            navigateToListScreen = navigateToListScreen
+        )
     }
 
 }
@@ -89,7 +95,7 @@ fun BackActionIcon(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExistingTaskAppBar(
-    selectedTask : Tasks,
+    selectedTask: Tasks,
     navigateToListScreen: (Action) -> Unit
 ) {
     TopAppBar(
@@ -109,8 +115,10 @@ fun ExistingTaskAppBar(
             containerColor = MaterialTheme.colorScheme.onPrimaryContainer, // Background color
         ),
         actions = {
-            DeleteAction(onDeletedClicked  = navigateToListScreen)
-            UpdateAction(onUpdatedClicked =  navigateToListScreen)
+            ExistingTaskBarAction(
+                selectedTask = selectedTask,
+                navigateToListScreen = navigateToListScreen
+            )
         }
     )
 }
@@ -130,6 +138,24 @@ fun AddActionIcon(
     }
 }
 
+@Composable
+fun ExistingTaskBarAction(
+    selectedTask: Tasks,
+    navigateToListScreen: (Action) -> Unit
+) {
+
+    var openAlert by remember { mutableStateOf(false) }
+    DisplayAlert(
+        title = "Deleted Task: ${selectedTask.title}",
+        message = "Are you sure deleted task ${selectedTask.title}",
+        openAlert = openAlert,
+        closeAlert = { openAlert = false },
+        onYesClick = { navigateToListScreen(Action.DELETE) }
+    )
+
+    DeleteAction(onDeletedClicked = { openAlert = true })
+    UpdateAction(onUpdatedClicked = navigateToListScreen)
+}
 
 
 @Composable
@@ -150,10 +176,10 @@ fun CloseAction(
 
 @Composable
 fun DeleteAction(
-    onDeletedClicked: (Action) -> Unit
+    onDeletedClicked: () -> Unit
 ) {
     IconButton(onClick = {
-        onDeletedClicked(Action.DELETE)
+        onDeletedClicked()
     }) {
         Icon(
             imageVector = Icons.Filled.Delete,
@@ -189,9 +215,9 @@ fun NewTaskAppBarPreview() {
 @Preview
 fun SelectedTaskAppBarPreview() {
     ExistingTaskAppBar(selectedTask = Tasks(
-        id  =  1,
+        id = 1,
         title = "Nguyen",
         description = "nguyen",
         priority = Priority.Low
-    ),navigateToListScreen = {})
+    ), navigateToListScreen = {})
 }

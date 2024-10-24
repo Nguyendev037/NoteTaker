@@ -36,8 +36,13 @@ fun ListContent(
     tasks: List<Tasks>,
     navigateToTaskScreen: (Int) -> Unit,
     searchTasks : List<Tasks>,
-    searchAppBarState : String
+    searchAppBarState : String,
+    lowToHighTasks : List<Tasks>,
+    highToLowTasks : List<Tasks>
 ) {
+    Log.d("searchAppBarState", searchAppBarState.toString())
+    Log.d("lowToHighTasks in Con", lowToHighTasks.toString())
+    Log.d("searchTasks in Con", searchTasks.toString())
     if (searchAppBarState == "OPEN"  && searchTasks.isNotEmpty()) {
 
         Log.d("searchTasks in Con", searchTasks.toString())
@@ -46,11 +51,21 @@ fun ListContent(
         Log.d("search process", "find ok")
 
 
-    } else {
+    } else if (searchAppBarState == "CLOSE" && lowToHighTasks.isNotEmpty()) {
+
+        Log.d("lowToHighTasks in Con", lowToHighTasks.toString())
+        HandleListContent(tasks = lowToHighTasks, navigateToTaskScreen = navigateToTaskScreen )
+
+    } else if (searchAppBarState == "CLOSE" && highToLowTasks.isNotEmpty()) {
+
+        Log.d("highToLowTasks in Con", highToLowTasks.toString())
+        HandleListContent(tasks = highToLowTasks, navigateToTaskScreen = navigateToTaskScreen )
+    }
+
+    else {
         HandleListContent(tasks = tasks, navigateToTaskScreen = navigateToTaskScreen )
         Log.d("search process", "find failed")
     }
-
 
 }
 

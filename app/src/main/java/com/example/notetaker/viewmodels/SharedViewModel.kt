@@ -135,6 +135,16 @@ class SharedViewModel @Inject constructor(private val repository: TaskRepository
         }
     }
 
+    // Handle Delete ALl Task ()
+
+
+    private fun deleteAllTask () {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllTask()
+        }
+    }
+
+
     fun changeAction(action: Action) {
         this.action.value = action
     }
@@ -157,6 +167,11 @@ class SharedViewModel @Inject constructor(private val repository: TaskRepository
                     deleteTask()
 //                    changeAction(Action.DELETE)
                 }
+
+                Action.DELETE_ALL -> {
+                    deleteAllTask()
+                }
+
 
                 Action.UNDO -> {
                     addTask()
@@ -195,5 +210,45 @@ class SharedViewModel @Inject constructor(private val repository: TaskRepository
     fun resetSearchTasks () {
         this._searchTasks.value = emptyList()
     }
+
+    // Sort Task
+
+    private val _listLowToHighPriorTasks  = MutableStateFlow<List<Tasks>>(emptyList())
+    val listLowToHighPriorTasks : StateFlow<List<Tasks>> = _listLowToHighPriorTasks
+
+
+    private val _listHighToLowPriorTasks  = MutableStateFlow<List<Tasks>>(emptyList())
+    val listHighToLowPriorTasks : StateFlow<List<Tasks>> = _listHighToLowPriorTasks
+
+
+   fun sortingStateAction(priority : Priority) {
+
+       Log.d("this function is running sorting", "ok")
+
+
+       if (priority == Priority.Low) {
+           Log.d("Get the priority", priority.toString())
+
+           viewModelScope.launch(Dispatchers.IO) {
+               repository.sortByHighPriority.collect {
+                   _listLowToHighPriorTasks.value = it
+               }
+           }
+       } else {
+           Log.d("Get the priority", priority.toString())
+           viewModelScope.launch(Dispatchers.IO) {
+               repository.sortByLowPriority.collect {
+                   _listHighToLowPriorTasks.value = it
+               }
+           }
+       }
+   }
+
+    fun resetSortTasks () {
+        this._listLowToHighPriorTasks.value = emptyList()
+        this._listHighToLowPriorTasks.value = emptyList()
+    }
+
+
 
 }

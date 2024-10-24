@@ -53,9 +53,17 @@ fun ListScreen(
 
     val searchTasks by sharedViewModel.searchTasks.collectAsState()
 
+    val LowtoHighPriorTasks by sharedViewModel.listLowToHighPriorTasks.collectAsState()
+    val HightoLowPriorTasks by sharedViewModel.listHighToLowPriorTasks.collectAsState()
+
+
     Log.d("_searchTask in Li", searchTasks.toString())
 
-    // any action change the screen will fetch all again
+
+
+
+
+        // any action change the screen will fetch all again
     LaunchedEffect(key1 = action) { sharedViewModel.getAllTasks() }
 
     DisplaySnackBar(
@@ -82,7 +90,14 @@ fun ListScreen(
             Column(
                 modifier = Modifier.padding(top = padding.calculateTopPadding())
             ) {
-                ListContent(tasks = allTasks, navigateToTaskScreen = navigateToTaskScreen, searchAppBarState = searchAppBarState, searchTasks = searchTasks)
+                ListContent(
+                    tasks = allTasks,
+                    navigateToTaskScreen = navigateToTaskScreen,
+                    searchAppBarState = searchAppBarState,
+                    searchTasks = searchTasks,
+                    lowToHighTasks  = LowtoHighPriorTasks,
+                    highToLowTasks =  HightoLowPriorTasks
+                )
             }
         },
 
@@ -115,7 +130,7 @@ fun DisplaySnackBar(
     snackBarHostState: SnackbarHostState,
     handleDatabaseAction: () -> Unit,
     taskTitle: String,
-    onUndoClicked : (Action) -> Unit,
+    onUndoClicked: (Action) -> Unit,
     action: Action
 ) {
 
@@ -124,7 +139,7 @@ fun DisplaySnackBar(
         if (action != Action.NO_ACTION) {
             handleDatabaseAction();
             val snackBarHostState = snackBarHostState.showSnackbar(
-                message = "${action.name} : $taskTitle",
+                message = setMessageSnack(action = action, title = taskTitle),
                 actionLabel = setActionLabel(action = action)
             )
             undoDeleteTask(
@@ -136,7 +151,7 @@ fun DisplaySnackBar(
     }
 }
 
-private fun setActionLabel(action : Action) : String{
+private fun setActionLabel(action: Action): String {
     return if (action.name == "DELETE") {
         "UNDO"
     } else {
@@ -144,10 +159,19 @@ private fun setActionLabel(action : Action) : String{
     }
 }
 
+private fun setMessageSnack(action: Action, title: String): String {
+    return if (action.name == "DELETE_ALL") {
+        "DELETE ALL TASK"
+    } else {
+        "${action.name} : $title"
+    }
+}
+
+
 private fun undoDeleteTask(
-    action : Action,
-    snackBarResult : SnackbarResult,
-    onUndoClicked : (Action) -> Unit,
+    action: Action,
+    snackBarResult: SnackbarResult,
+    onUndoClicked: (Action) -> Unit,
 ) {
     // SnackBarResult.ActionPerformed will track if user click on label action
     // in SnackBar

@@ -45,9 +45,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.notetaker.components.DisplayAlert
 import com.example.notetaker.components.PriorityComponent
 
 import com.example.notetaker.ui.theme.*
+import com.example.notetaker.util.Action
 import com.example.notetaker.viewmodels.SharedViewModel
 import java.security.Key
 
@@ -63,9 +65,17 @@ fun ListAppBar(
 
     when (searchAppBarState) {
         "CLOSE" -> {
-            DefaultListAppBar(onSearchClicked = {
-                sharedViewModel.searchAppBarState.value = "OPEN"
-            }, onSortClicked = {}, onDeleteClicked = {})
+            DefaultListAppBar(
+                onSearchClicked = {
+                    sharedViewModel.searchAppBarState.value = "OPEN"
+                },
+                onSortClicked = {
+                    sharedViewModel.sortingStateAction(it)
+                    sharedViewModel.resetSortTasks()
+                },
+                onDeleteClicked = {
+                    sharedViewModel.action.value = Action.DELETE_ALL
+                })
         }
 
         else -> {
@@ -79,7 +89,8 @@ fun ListAppBar(
                 },
                 onSearchClicked = {
                     Log.d("Search Query", searchTextState)
-                    sharedViewModel.searchDataBaseQuery(searchQuery = searchTextState)},
+                    sharedViewModel.searchDataBaseQuery(searchQuery = searchTextState)
+                },
             )
         }
     }
@@ -120,7 +131,19 @@ fun ListAppBarActions(
 ) {
     SearchAction(onSearchClicked = onSearchClicked)
     SortAction(onSortClicked = onSortClicked)
-    DeleteAction(onDeleteClicked = onDeleteClicked)
+
+    var openAlert by remember { mutableStateOf(false) }
+    DeleteAction(onDeleteClickedConfirmed = { openAlert = true })
+
+    DisplayAlert(
+        title = "Delete All Task",
+        message = "Are you sure deleting all tasks",
+        onYesClick = { onDeleteClicked },
+        openAlert = openAlert,
+        closeAlert = { openAlert = false },
+    )
+
+
 }
 
 //Declare the Search Button with the action search
@@ -178,8 +201,8 @@ fun SortAction(
 
 // Declare the Delete Button with the Button Action
 @Composable
-fun DeleteAction(onDeleteClicked: () -> Unit) {
-    IconButton(onClick = { onDeleteClicked() }) {
+fun DeleteAction(onDeleteClickedConfirmed: () -> Unit) {
+    IconButton(onClick = { onDeleteClickedConfirmed() }) {
         Icon(
             imageVector = Icons.Filled.Delete,
             contentDescription = "Delete action",
