@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -96,7 +97,12 @@ fun ListScreen(
                     searchAppBarState = searchAppBarState,
                     searchTasks = searchTasks,
                     lowToHighTasks  = LowtoHighPriorTasks,
-                    highToLowTasks =  HightoLowPriorTasks
+                    highToLowTasks =  HightoLowPriorTasks,
+                    onSwipeToDelete = {action, task ->
+                        Log.d("SwipeToDelete", "Action: $action, Task: ${task.title}")
+                        sharedViewModel.action.value = action
+                        sharedViewModel.updateTaskFields(selectedTask = task)
+                    }
                 )
             }
         },
@@ -140,7 +146,8 @@ fun DisplaySnackBar(
             handleDatabaseAction();
             val snackBarHostState = snackBarHostState.showSnackbar(
                 message = setMessageSnack(action = action, title = taskTitle),
-                actionLabel = setActionLabel(action = action)
+                actionLabel = setActionLabel(action = action),
+                duration = SnackbarDuration.Short
             )
             undoDeleteTask(
                 action = action,

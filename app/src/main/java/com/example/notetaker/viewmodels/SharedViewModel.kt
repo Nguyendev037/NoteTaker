@@ -74,6 +74,10 @@ class SharedViewModel @Inject constructor(private val repository: TaskRepository
     val priority: MutableState<Priority> = mutableStateOf(Priority.Low)
 
     fun updateTaskFields(selectedTask: Tasks?) {
+
+        Log.d("selectedTask in shareviewModel", searchTasks.toString())
+
+
         if (selectedTask != null) {
             id.value = selectedTask.id
             title.value = selectedTask.title
@@ -130,7 +134,9 @@ class SharedViewModel @Inject constructor(private val repository: TaskRepository
     // Handle Delete Function
     private fun deleteTask() {
         viewModelScope.launch(Dispatchers.IO) {
+            Log.d("delete task id", id.value.toString())
             val taskId = id.value
+            _allTasks.value = _allTasks.value.filter { it.id != taskId }
             repository.deleteTask(taskId = taskId)
         }
     }
@@ -175,7 +181,6 @@ class SharedViewModel @Inject constructor(private val repository: TaskRepository
 
                 Action.UNDO -> {
                     addTask()
-                    Log.d("action undo is running", "is running")
 //                    changeAction(Action.UNDO)
                 }
 
@@ -194,16 +199,14 @@ class SharedViewModel @Inject constructor(private val repository: TaskRepository
 
 
     fun searchDataBaseQuery(searchQuery : String) {
-        Log.d("search process", "success run")
-        Log.d("seachQuery", searchQuery)
+
         viewModelScope.launch {
             repository.searchDatabase(searchQuery = "%$searchQuery%").collect {
                 _searchTasks.value = it
             }
         }
         this.searchAppBarState.value = "OPEN"
-        Log.d("_searchTask in shareviewModel", _searchTasks.value.toString())
-        Log.d("searchTasks in shareviewModel", searchTasks.value.toString())
+
     }
 
 
@@ -223,19 +226,16 @@ class SharedViewModel @Inject constructor(private val repository: TaskRepository
 
    fun sortingStateAction(priority : Priority) {
 
-       Log.d("this function is running sorting", "ok")
+
 
 
        if (priority == Priority.Low) {
-           Log.d("Get the priority", priority.toString())
-
            viewModelScope.launch(Dispatchers.IO) {
                repository.sortByHighPriority.collect {
                    _listLowToHighPriorTasks.value = it
                }
            }
        } else {
-           Log.d("Get the priority", priority.toString())
            viewModelScope.launch(Dispatchers.IO) {
                repository.sortByLowPriority.collect {
                    _listHighToLowPriorTasks.value = it
