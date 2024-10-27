@@ -133,15 +133,15 @@ fun ListAppBarActions(
     SortAction(onSortClicked = onSortClicked)
 
     var openAlert by remember { mutableStateOf(false) }
-    DeleteAction(onDeleteClickedConfirmed = { openAlert = true })
 
     DisplayAlert(
         title = "Delete All Task",
         message = "Are you sure deleting all tasks",
-        onYesClick = { onDeleteClicked },
+        onYesClick = { onDeleteClicked() },
         openAlert = openAlert,
         closeAlert = { openAlert = false },
     )
+    DeleteAction(onDeleteClickedConfirmed = { openAlert = true })
 
 
 }

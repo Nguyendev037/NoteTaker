@@ -145,7 +145,8 @@ fun DisplaySnackBar(
         if (action != Action.NO_ACTION) {
             handleDatabaseAction();
             val snackBarHostState = snackBarHostState.showSnackbar(
-                message = setMessageSnack(action = action, title = taskTitle),
+//                message = setMessageSnack(action = action, title = taskTitle),
+                message = "OK",
                 actionLabel = setActionLabel(action = action),
                 duration = SnackbarDuration.Short
             )
@@ -166,13 +167,13 @@ private fun setActionLabel(action: Action): String {
     }
 }
 
-private fun setMessageSnack(action: Action, title: String): String {
-    return if (action.name == "DELETE_ALL") {
-        "DELETE ALL TASK"
-    } else {
-        "${action.name} : $title"
-    }
-}
+//private fun setMessageSnack(action: Action, title: String): String {
+//    return if (action.name == "DELETE_ALL") {
+//        "DELETE ALL TASK"
+//    } else {
+//        "${action.name} : $title"
+//    }
+//}
 
 
 private fun undoDeleteTask(

@@ -134,9 +134,8 @@ class SharedViewModel @Inject constructor(private val repository: TaskRepository
     // Handle Delete Function
     private fun deleteTask() {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d("delete task id", id.value.toString())
             val taskId = id.value
-            _allTasks.value = _allTasks.value.filter { it.id != taskId }
+//            _allTasks.value = _allTasks.value.filter { it.id != taskId }
             repository.deleteTask(taskId = taskId)
         }
     }
@@ -146,6 +145,7 @@ class SharedViewModel @Inject constructor(private val repository: TaskRepository
 
     private fun deleteAllTask () {
         viewModelScope.launch(Dispatchers.IO) {
+            Log.d("delete", "test1")
             repository.deleteAllTask()
         }
     }
@@ -231,13 +231,13 @@ class SharedViewModel @Inject constructor(private val repository: TaskRepository
 
        if (priority == Priority.Low) {
            viewModelScope.launch(Dispatchers.IO) {
-               repository.sortByHighPriority.collect {
+               repository.sortByLowPriority.collect {
                    _listLowToHighPriorTasks.value = it
                }
            }
        } else {
            viewModelScope.launch(Dispatchers.IO) {
-               repository.sortByLowPriority.collect {
+               repository.sortByHighPriority.collect {
                    _listHighToLowPriorTasks.value = it
                }
            }
